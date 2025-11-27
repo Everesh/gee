@@ -3,8 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 func main() {
@@ -12,6 +14,10 @@ func main() {
 	path := getPath()
 
 	// TODO start cli animation (ansi escape chars (kaomoji might be fun to animate)) while the search run
+	done := make(chan bool)
+	go spinner(done)
+
+	time.Sleep(50 * time.Second) // so I can visualize the cli anim during dev
 
 	// TODO build a tree representation 3 field (name, size, childern), dirs should init nil size
 
@@ -21,6 +27,7 @@ func main() {
 
 	// TODO figure out top x relevant items to display to match line count
 
+	done <- true
 	// TODO render it out bby (sofar probably as name:size in human readable format: horizontal barchart (figure out how to signify folder membership))
 
 	fmt.Println(path)
@@ -55,4 +62,33 @@ func getPath() string {
 	}
 
 	return path
+}
+
+func spinner(done chan bool) {
+	frames := []string{"(• - • )", "( • - •)"}
+	framesExtra := []string{
+		"( ꩜ ᯅ ꩜ ;) How do you keep track of this?...",
+		"( ˶°ㅁ°) It goes deeper?...",
+		"(✿ ◠ ᴗ ◠ ) Cute browser cache, mind if I scrape the passwords?...",
+		"ദ്ദി(•̀ᴗ -)✧ Lets delete the rest and call it a day!...",
+		"(╭ರ_•́ ) That's for research purposes only, right?...",
+	}
+	i := 0
+
+	for {
+		select {
+		case <-done:
+			fmt.Print("\r\033[K")
+			return
+		default:
+			if rand.Int()%10 == 1 {
+				fmt.Printf("\r\033[K%s", framesExtra[rand.Int()%len(framesExtra)])
+				time.Sleep(2 * time.Second)
+			} else {
+				fmt.Printf("\r\033[K%s Snooping around...", frames[i])
+				i = (i + 1) % len(frames)
+			}
+			time.Sleep(1 * time.Second)
+		}
+	}
 }
