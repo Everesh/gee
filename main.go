@@ -81,14 +81,18 @@ func spinner(done chan bool) {
 			fmt.Print("\r\033[K")
 			return
 		default:
-			if rand.Int()%10 == 1 {
-				fmt.Printf("\r\033[K%s", framesExtra[rand.Int()%len(framesExtra)])
-				time.Sleep(2 * time.Second)
+			var sleepTime time.Duration
+
+			if rand.Intn(10) == 1 {
+				fmt.Printf("\r\033[K%s", framesExtra[rand.Intn(len(framesExtra))])
+				sleepTime = 3 * time.Second
 			} else {
 				fmt.Printf("\r\033[K%s Snooping around...", frames[i])
 				i = (i + 1) % len(frames)
+				sleepTime = time.Second
 			}
-			time.Sleep(1 * time.Second)
+
+			time.Sleep(sleepTime)
 		}
 	}
 }
