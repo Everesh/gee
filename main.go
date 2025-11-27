@@ -35,13 +35,13 @@ func main() {
 
 func getPath() string {
 	if len(os.Args) > 2 {
-		log.Fatalln("Lol. Lmao. Pass a single arg at most you moron!")
+		log.Fatalf("Wrong number of arguments, expected 1, got %d!", len(os.Args)-1)
 	}
 
 	if len(os.Args) == 1 {
 		path, err := os.Getwd()
 		if err != nil {
-			log.Fatalln("Where the fuck have you called this from? There is no cwd on here!")
+			log.Fatalln("Failed to infer path!")
 		}
 
 		return path
@@ -49,16 +49,16 @@ func getPath() string {
 
 	path, err := filepath.Abs(os.Args[1])
 	if err != nil {
-		log.Fatalln("Maybe pass in a path, yeah?")
+		log.Fatalln("Failed to convert arg to absolute path!")
 	}
 
 	info, err := os.Stat(path)
 	if err != nil {
-		log.Fatalln("Maybe make sure the path is valid before bothering me...")
+		log.Fatalln("Passed arg is not a path!")
 	}
 
 	if !info.IsDir() {
-		log.Fatalln("Dude... that's a file, not a dir. What do you expect me to do?")
+		log.Fatalln("Passed arg is not a path!")
 	}
 
 	return path
