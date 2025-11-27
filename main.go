@@ -15,11 +15,7 @@ func main() {
 	done := make(chan bool)
 	go spinner(done)
 
-	time.Sleep(50 * time.Second) // so I can visualize the cli anim during dev
-
-	// TODO build a tree representation 3 field (name, size, childern), dirs should init nil size
-
-	// TODO reverse populate size on dirs as sum of children
+	root := buildTree(path)
 
 	// TODO get terminal dimentions, figure out line count
 
@@ -28,7 +24,7 @@ func main() {
 	done <- true
 	// TODO render it out bby (sofar probably as name:size in human readable format: horizontal barchart (figure out how to signify folder membership))
 
-	fmt.Println(path)
+	printTree(root, "")
 }
 
 func getPath() string {
