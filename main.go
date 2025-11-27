@@ -10,10 +10,8 @@ import (
 )
 
 func main() {
-	// TODO extract path from the first arg or infer cwd if no args
 	path := getPath()
 
-	// TODO start cli animation (ansi escape chars (kaomoji might be fun to animate)) while the search run
 	done := make(chan bool)
 	go spinner(done)
 
