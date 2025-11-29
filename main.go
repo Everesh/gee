@@ -28,8 +28,6 @@ func main() {
 
 	done <- true
 
-	// TODO render it out bby (sofar probably as name:size in human readable format: horizontal barchart (figure out how to signify folder membership))
-
 	printTree(root, termWidth)
 }
 
