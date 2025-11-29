@@ -2,10 +2,8 @@ package main
 
 import (
 	"container/heap"
-	"fmt"
 	"os"
 	"path/filepath"
-	"strconv"
 )
 
 type Node struct {
@@ -98,15 +96,4 @@ func (h *NodeHeap) Pop() any {
 	x := old[n-1]
 	*h = old[0 : n-1]
 	return x
-}
-
-func printTree(root *Node, prefix string) {
-	fmt.Println(prefix + root.Name + " : " + strconv.FormatInt(root.Size, 10))
-	for _, entry := range root.Children {
-		if entry.Children != nil {
-			printTree(entry, prefix+"  ")
-		} else {
-			fmt.Println(prefix + entry.Name + " : " + strconv.FormatInt(entry.Size, 10))
-		}
-	}
 }

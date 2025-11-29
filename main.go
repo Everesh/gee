@@ -2,18 +2,19 @@ package main
 
 import (
 	"fmt"
-	"golang.org/x/term"
 	"log"
 	"math/rand"
 	"os"
 	"path/filepath"
 	"time"
+
+	"golang.org/x/term"
 )
 
 func main() {
 	path := getPath()
 
-	_, termHeight, err := term.GetSize(int(os.Stdout.Fd()))
+	termWidth, termHeight, err := term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
 		log.Fatalln("Failed to get term dimensions!")
 	}
@@ -29,7 +30,7 @@ func main() {
 
 	// TODO render it out bby (sofar probably as name:size in human readable format: horizontal barchart (figure out how to signify folder membership))
 
-	printTree(root, "")
+	printTree(root, termWidth)
 }
 
 func getPath() string {
