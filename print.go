@@ -26,7 +26,7 @@ func populateLines(root *Node, width, max int, prefix string, lines *[]string) {
 		humanSize(root.Size)+" "+
 		name+strings.Repeat(" ", widthTree-len(name))+" │"+
 		makeBar(max, int(root.Size), width-widthTree-20)+"│ "+
-		fmt.Sprintf("%d", int(100*float64(root.Size)/float64(max)))+"% ")
+		fmt.Sprintf("%3d", int(100*float64(root.Size)/float64(max)))+"% ")
 
 	for _, child := range root.Children {
 		populateLines(child, width, max, prefix+"  ", lines)
@@ -49,11 +49,11 @@ func humanSize(size int64) string {
 	}
 
 	if fsize >= 100 {
-		return fmt.Sprintf("  %.0f %s ", fsize, units[unitIndex])
+		return fmt.Sprintf("%4.0f %s ", fsize, units[unitIndex])
 	} else if fsize >= 10 {
-		return fmt.Sprintf(" %.1f %s ", fsize, units[unitIndex])
+		return fmt.Sprintf("%4.1f %s ", fsize, units[unitIndex])
 	} else {
-		return fmt.Sprintf(" %.2f %s ", fsize, units[unitIndex])
+		return fmt.Sprintf("%4.2f %s ", fsize, units[unitIndex])
 	}
 }
 

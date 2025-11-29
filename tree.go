@@ -18,6 +18,14 @@ func buildTree(path string) *Node {
 	return root
 }
 
+// paths to skip
+var blacklist = map[string]bool{
+	"/proc": true,
+	"/sys":  true,
+	"/dev":  true,
+	"/run":  true,
+}
+
 func populate(node *Node, path string) {
 	entries, err := os.ReadDir(path)
 	if err != nil {
@@ -26,6 +34,10 @@ func populate(node *Node, path string) {
 
 	for _, entry := range entries {
 		childPath := filepath.Join(path, entry.Name())
+
+		if blacklist[childPath] {
+			continue
+		}
 
 		if entry.IsDir() {
 			child := &Node{Name: entry.Name()}
