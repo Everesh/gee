@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"golang.org/x/term"
 	"log"
 	"math/rand"
 	"os"
@@ -12,16 +13,20 @@ import (
 func main() {
 	path := getPath()
 
+	_, termHeight, err := term.GetSize(int(os.Stdout.Fd()))
+	if err != nil {
+		log.Fatalln("Failed to get term dimensions!")
+	}
+
 	done := make(chan bool)
 	go spinner(done)
 
 	root := buildTree(path)
 
-	// TODO get terminal dimentions, figure out line count
-
-	// TODO figure out top x relevant items to display to match line count
+	root = prune(root, termHeight-1)
 
 	done <- true
+
 	// TODO render it out bby (sofar probably as name:size in human readable format: horizontal barchart (figure out how to signify folder membership))
 
 	printTree(root, "")

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/heap"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -46,6 +47,57 @@ func populate(node *Node, path string) {
 			node.Size += child.Size
 		}
 	}
+}
+
+// Since folders are the size of the sum of their children this can be greedy
+func prune(root *Node, size int) *Node {
+	keep := make(map[*Node]bool)
+	pq := &NodeHeap{root}
+	heap.Init(pq)
+
+	for pq.Len() > 0 && len(keep) < size {
+		node := heap.Pop(pq).(*Node)
+		keep[node] = true
+
+		for _, child := range node.Children {
+			heap.Push(pq, child)
+		}
+	}
+
+	var reduced func(node *Node) *Node
+	reduced = func(node *Node) *Node {
+		if node == nil || !keep[node] {
+			return nil
+		}
+
+		newChildren := []*Node{}
+		for _, child := range node.Children {
+			rc := reduced(child)
+			if rc == nil {
+				continue
+			}
+			newChildren = append(newChildren, rc)
+		}
+		node.Children = newChildren
+		return node
+	}
+
+	return reduced(root)
+}
+
+// Max Heap (this reminds me of old school JS classes ;.;)
+type NodeHeap []*Node
+
+func (h NodeHeap) Len() int           { return len(h) }
+func (h NodeHeap) Less(i, j int) bool { return h[i].Size > h[j].Size }
+func (h NodeHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
+func (h *NodeHeap) Push(x any)        { *h = append(*h, x.(*Node)) }
+func (h *NodeHeap) Pop() any {
+	old := *h
+	n := len(old)
+	x := old[n-1]
+	*h = old[0 : n-1]
+	return x
 }
 
 func printTree(root *Node, prefix string) {
