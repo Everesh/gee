@@ -68,7 +68,6 @@ func spinner(done chan bool) {
 		"( ꩜ ᯅ ꩜ ;) How do you keep track of this?...",
 		"( ˶°ㅁ°) It goes deeper?...",
 		"(✿ ◠ ᴗ ◠ ) Cute browser cache, mind if I scrape the passwords?...",
-		"ദ്ദി(•̀ᴗ -)✧ Lets delete the rest and call it a day!...",
 		"(╭ರ_•́ ) That's for research purposes only, right?...",
 	}
 	i := 0
